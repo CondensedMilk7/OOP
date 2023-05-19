@@ -20,7 +20,7 @@ jobs:
           npm install
       - name: Build application
         run: |
-          npm run build --base /${{ github.event.repository.name }}/
+          npm run build --base /
           cp dist/index.html dist/404.html
       - name: Deploy pages
         uses: crazy-max/ghaction-github-pages@v3.1.0
