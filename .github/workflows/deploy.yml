@@ -1,29 +1,23 @@
 name: Deploy pages
-
-on:  push
-
+on: push
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package.lock') }}
       - name: Install dependencies
-        run: |
-          npm install
-      - name: Build application
-        run: |
-          npm run build --base /
-          cp dist/index.html dist/404.html
+        run: npm install
+      - name: Install slidev
+        run:  npm i -g @slidev/cli
+      - name: Install for PDF  
+        run: npm i -D playwright-chromium
+      - name: Build
+        run: slidev build --base /${{ github.event.repository.name }}/
       - name: Deploy pages
-        uses: crazy-max/ghaction-github-pages@v3.1.0
+        uses: crazy-max/ghaction-github-pages@v3
         with:
           build_dir: dist
         env:
